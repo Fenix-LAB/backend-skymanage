@@ -249,6 +249,8 @@ Son los que se encargan de realizar codigo mas complejo, como por ejemplo notifi
 
 Estan relacionados con los endpoints de la API, un endpoint puede hacer uso de uno o mas servicios.
 
+Ejemplo de un servicio:
+
 ```python
 sql_static_data = (
                 select(
