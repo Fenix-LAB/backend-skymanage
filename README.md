@@ -1,4 +1,16 @@
-# Esta la arquitectura del backend
+# Arquitectura del backend
+
+#### El Negocio:
+"SkyManage" es una aerolínea que opera en rutas internacionales y enfrenta desafíos
+únicos en la gestión y asignación de sus recursos. Con una flota variada y operaciones
+en múltiples zonas horarias y climáticas, SkyManage busca soluciones tecnológicas para
+mejorar su eficiencia operativa.
+
+#### Problemática Central:
+SkyManage necesita un sistema que ayude a manejar de manera eficiente las
+asignaciones de tripulación y aviones, especialmente en situaciones de cambios
+imprevistos como mal tiempo, problemas técnicos, o cambios en la disponibilidad de la
+tripulación
 
 La arquitectura de la solución y organización de carpetas
 
@@ -291,38 +303,6 @@ sql_static_data = (
                 )
                 .where(operators_model.Operators.object_id == object.id)
             )
-            # Se realiza una consulta para obtener los eventos mas recientes de cada objeto
-            sql_event = (
-                select(events_gps_model.EventsGps)
-                .where(events_gps_model.EventsGps.object_id == object.id)
-                .order_by(events_gps_model.EventsGps.id.desc())
-                .limit(1)
-            )
-
-            db_static_data = (await session.execute(sql_static_data)).all()
-            db_event = (await session.execute(sql_event)).scalars().unique().first()
-
-            event_dict = get_valid_data(db_event, events_gps_model.EventsGps)
-
-            if not db_event:
-                is_online = False
-                time = None
-                ignition = None
-            if db_event:
-                is_online, time = object_online(event_dict["dt_tracker"])
-                ignition = object_ignition(event_dict["params"], object.protocol)
-
-            if not db_static_data:
-                status = Status(status="Unknow", status_info="La unidad no tiene asignada una ruta")
-
-            if db_static_data:
-                status = object_status(
-                    db_static_data,
-                    event_dict["lat"],
-                    event_dict["lng"],
-                    event_dict["dt_tracker"],
-                    event_dict["speed"],
-                )
 
             # Se agrega el objeto a la lista de objetos
             objects_list.append(
