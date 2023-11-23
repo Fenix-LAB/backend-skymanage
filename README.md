@@ -243,7 +243,7 @@ class UserResponse(BaseModel):
     delay: bool
 ```
 
-### Servicios
+### 6 Servicios
 
 Son los que se encargan de realizar codigo mas complejo, como por ejemplo notificar si el vuelo esta activo o no.
 
